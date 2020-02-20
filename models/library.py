@@ -7,3 +7,7 @@ class Library:
         self.booksIds = booksIds
         self.nbOfBooksScanned = nbOfBooksScanned
 
+    def __str__(self):
+        res = f'{self.nbOfBooks} {self.signUpTime} {self.bookOutput} : '
+        return res + str(self.booksIds)
+
