@@ -1,4 +1,10 @@
-class Execution:
-    __init__(self, libraries, bookLists)
+class Solution:
+    __init__(self, nbOfLibraries, libraries)
+        self.nbOfLibraries = nbOfLibraries
         self.libraries = libraries
-        slef.bookLists = bookLists
+
+class SolutionLibrary:
+    __init__(self, libraryId, nbOfBooksScanned, booksIds)
+        self.libraryId = libraryId
+        self.nbOfBooksScanned = nbOfBooksScanned
+        self.booksIds = booksIds
