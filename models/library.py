@@ -1,6 +1,12 @@
 class Library:
-    def __init__(self, nbOfBooks, signUpTime, bookOutput):
+    def __init__(self, nbOfBooks, signUpTime, bookOutput,books):
         self.nbOfBooks = nbOfBooks
         self.signUpTime = signUpTime
         self.bookOutput = bookOutput
+        self.books = books
+
+    def __str__(self):
+        res = f'{self.nbOfBooks} {self.signUpTime} {self.bookOutput} : '
+        return res + str(self.books)
+
 
