@@ -14,7 +14,7 @@ def fileToObject(filename):
         for i in range(2,len(lines),2):
             libBooks, signUp, booksOutput = map(int, lines[i].split(' '))
             books = list(map(int, lines[i+1].split(' '))) 
-            libs.append(Library(libBooks, signUp, booksOutput, books))
+            libs.append(Library(len(libs), libBooks, signUp, booksOutput, books))
 
         return File(numOfBooks, numOfLibs, deadline, bookScores, libs)
 

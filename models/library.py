@@ -1,5 +1,6 @@
 class Library:
-    def __init__(self, nbOfBooks, signUpTime, bookOutput,books):
+    def __init__(self,libraryId ,nbOfBooks, signUpTime, bookOutput,books):
+        self.libraryId = libraryId
         self.nbOfBooks = nbOfBooks
         self.signUpTime = signUpTime
         self.bookOutput = bookOutput
