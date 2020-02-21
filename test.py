@@ -1,6 +1,6 @@
 import os
 from models import Library, Input, Book
-from calculateFinalScore import calculateFinalScore
+from score import calculateFinalScore
 from program import solve
 
 IN_FOLDER = './in/'
