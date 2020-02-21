@@ -4,27 +4,20 @@ def calculateFinalScore(inputObj, libs):
     scanned = [False] * inputObj.nbOfBooks
 
     for lib in libs:
-
-        # skip if the sign up will take too long
-        if currentDay + lib.signUpTime > inputObj.nbOfDays:
-            break
-
-        # else add sign up time
         currentDay += lib.signUpTime
 
-        # for each day left, for each book today, add books
-        bookPos = 0
-        virtualFuture = currentDay
-        while bookPos < len(lib.scannedBooks) and virtualFuture < inputObj.nbOfDays:
-            bookId = lib.scannedBooks[bookPos].id
-            bookScore = lib.scannedBooks[bookPos].score
-            if not scanned[bookId]:
-                scanned[bookId] = True
-                score += bookScore
-            bookPos += 1
+        # exit if the sign took too long
+        if currentDay > inputObj.nbOfDays:
+            break
 
-            # increase the day count if the we went through all the books for this day
-            if bookPos % lib.bookOutput == 0:
-                virtualFuture += 1
+        for i, book in enumerate(lib.scannedBooks):
+            # exit if the due date has been reached
+            if (currentDay + i // lib.scanningPower) > inputObj.nbOfDays:
+                break
+
+            # add the score of the book, if it hasn't been scanned yet
+            if not scanned[book.id]:
+                scanned[book.id] = True
+                score += book.score
 
     return score

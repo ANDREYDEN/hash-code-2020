@@ -11,15 +11,15 @@ class Input:
 
 
 class Library:
-    def __init__(self, id, signUpTime, bookOutput, books, scannedBooks):
+    def __init__(self, id, signUpTime, scanningPower, books, scannedBooks):
         self.id = id
         self.signUpTime = signUpTime
-        self.bookOutput = bookOutput
+        self.scanningPower = scanningPower
         self.books = books
         self.scannedBooks = scannedBooks
 
     def __str__(self):
-        res = f'{self.nbOfBooks} {self.signUpTime} {self.bookOutput} : '
+        res = f'{self.nbOfBooks} {self.signUpTime} {self.scanningPower} : '
         return res + str(self.booksIds)
 
 

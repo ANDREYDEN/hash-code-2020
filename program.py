@@ -10,7 +10,7 @@ def solve(fileObj, libComparator):
         lib.booksIds = sorted(lib.books, key=lambda b: -b.score)
 
     # sort the libraries
-    libraries = sorted(libraries, key=libComparator)
+    libraries = sorted(libraries, key=lambda lib: -libComparator(lib))
 
     # keep track of processed books
     finished = [False] * fileObj.nbOfBooks
@@ -22,15 +22,25 @@ def solve(fileObj, libComparator):
                 finished[book.id] = True
                 lib.scannedBooks.append(book)
 
+    # don't include libraries that don't have books to scan
     libraries = list(filter(lambda lib: len(lib.scannedBooks) > 0, libraries))
 
     return libraries
 
+###################### Library comparison functions ######################
+# if the library's score is high, then it will be processed early
 
-def libScoreBySignup(lib):
-    return lib.signUpTime
+
+def libScoreCombined(lib):
+    bookMean = statistics.mean([book.score for book in lib.books])
+    return bookMean / lib.signUpTime
 
 
-def libScoreByMean(lib):
+def libScoreReversedSignup(lib):
+    return 1 / lib.signUpTime
+
+
+def libScoreNaive(lib):
     mean = statistics.mean([book.score for book in lib.books])
-    return mean / (lib.signUpTime + len(lib.books) / lib.bookOutput)
+    scanTime = len(lib.books) / lib.scanningPower
+    return mean / (lib.signUpTime + scanTime)
