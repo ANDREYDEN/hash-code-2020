@@ -33,7 +33,7 @@ def readFiles():
 
 
 def printScore(filename, score):
-    print(f'{filename.ljust(10, " ")}: {score}')
+    print(f'{filename.ljust(5, " ")}: {score:,}')
 
 
 def readAndTestOne(filename):
@@ -43,8 +43,11 @@ def readAndTestOne(filename):
 
 
 def printScores(inputs, solutions):
-    for inputObj, solution, filename in zip(inputs, solutions, FILE_NAMES):
-        printScore(filename, calculateFinalScore(inputObj, solution))
+    scores = [calculateFinalScore(inputObj, solution)
+              for inputObj, solution in zip(inputs, solutions)]
+    for score, filename in zip(scores, FILE_NAMES):
+        printScore(filename, score)
+    print('Total:', f'{sum(scores):,}')
 
 
 def submitToFile(libs, filepath):

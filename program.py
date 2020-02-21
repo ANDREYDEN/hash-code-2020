@@ -1,7 +1,8 @@
 from models import Library
+import statistics
 
 
-def solve(fileObj):
+def solve(fileObj, libComparator):
     # foreach library - sort the books
     libraries = fileObj.libraries
 
@@ -9,7 +10,7 @@ def solve(fileObj):
         lib.booksIds = sorted(lib.books, key=lambda b: -b.score)
 
     # sort the libraries
-    libraries = sorted(libraries, key=libraryScore)
+    libraries = sorted(libraries, key=libComparator)
 
     # keep track of processed books
     finished = [False] * fileObj.nbOfBooks
@@ -26,11 +27,10 @@ def solve(fileObj):
     return libraries
 
 
-def libraryScore(lib):
-    # return lib.signUpTime
-    sum = 0
-    numOfBooks = len(lib.books)
-    for book in lib.books:
-        sum += book.score
-    return (sum / numOfBooks) / \
-        (lib.signUpTime + numOfBooks / lib.bookOutput)
+def libScoreBySignup(lib):
+    return lib.signUpTime
+
+
+def libScoreByMean(lib):
+    mean = statistics.mean([book.score for book in lib.books])
+    return mean / (lib.signUpTime + len(lib.books) / lib.bookOutput)
