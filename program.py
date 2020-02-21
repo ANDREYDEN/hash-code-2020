@@ -1,10 +1,9 @@
-from models.library import Library
+from models import Library
 
 
 def solve(fileObj):
     # foreach library - sort the books
     libraries = fileObj.libraries
-    bookScores = fileObj.bookScores
 
     for lib in libraries:
         lib.booksIds = sorted(lib.books, key=lambda b: -b.score)
@@ -28,7 +27,7 @@ def solve(fileObj):
 
 
 def libraryScore(lib):
-    return lib.signUpTime
+    # return lib.signUpTime
     sum = 0
     numOfBooks = len(lib.books)
     for book in lib.books:

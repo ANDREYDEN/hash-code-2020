@@ -1,17 +1,16 @@
 import os
-from models.library import Library
-from models.file import File
-from models.book import Book
+from models import Library, Input, Book
 from calculateFinalScore import calculateFinalScore
 from program import solve
 
 IN_FOLDER = './in/'
 OUT_FOLDER = './out/'
+FILE_NAMES = 'abcdef'
 
 
 def fileToObject(filename):
-    with open(filename, 'r') as fn:
-        lines = fn.read().splitlines()
+    with open(filename, 'r') as fin:
+        lines = fin.read().splitlines()
         numOfBooks, numOfLibs, deadline = map(int, lines[0].split(' '))
         bookScores = list(map(int, lines[1].split(' ')))
         libs = []
@@ -21,29 +20,34 @@ def fileToObject(filename):
                 continue
             _, signUp, booksOutput = map(int, lines[i].split(' '))
             books = []
-            for score, i in enumerate(lines[i+1].split(' ')):
-                books.append(Book(int(i), int(score)))
-            libs.append(Library(len(libs),
-                                signUp,
-                                booksOutput,
-                                books,
-                                []))
+            for idx in map(int, lines[i+1].split(' ')):
+                books.append(Book(idx, bookScores[idx]))
 
-        return File(numOfBooks, numOfLibs, deadline, bookScores, libs)
+            libs.append(Library(len(libs), signUp, booksOutput, books, []))
+
+        return Input(numOfBooks, deadline, libs)
 
 
-def testFiles():
-    for name in os.listdir(IN_FOLDER):
-        testFile(IN_FOLDER + name)
+def readFiles():
+    return [fileToObject(IN_FOLDER + filename) for filename in os.listdir(IN_FOLDER)]
 
 
-def testFile(filepath):
-    obj = fileToObject(filepath)
-    solution = solve(obj)
-    print(calculateFinalScore(solution, obj))
+def printScore(filename, score):
+    print(f'{filename.ljust(10, " ")}: {score}')
 
 
-def solutionToFile(libs, filepath):
+def readAndTestOne(filename):
+    inputObj = fileToObject(filename)
+    solution = solve(inputObj)
+    printScore(calculateFinalScore(inputObj, solution), filename)
+
+
+def printScores(inputs, solutions):
+    for inputObj, solution, filename in zip(inputs, solutions, FILE_NAMES):
+        printScore(filename, calculateFinalScore(inputObj, solution))
+
+
+def submitToFile(libs, filepath):
     with open(filepath, 'w') as fout:
         fout.write(str(len(libs)) + '\n')
         for lib in libs:
@@ -52,12 +56,6 @@ def solutionToFile(libs, filepath):
                 ' '.join(list(map(lambda book: str(book.id), lib.scannedBooks))) + '\n')
 
 
-if __name__ == "__main__":
-    # testFile(IN_FOLDER + 'a_example.txt')
-    # print(fileToObject(IN_FOLDER + 'a_example.txt'))
-
-    files = ['a_example.txt', 'b_read_on.txt', 'c_incunabula.txt',
-             'd_tough_choices.txt', 'e_so_many_books.txt', 'f_libraries_of_the_world.txt']
-    for file in files:
-        solution = solve(fileToObject(IN_FOLDER + file))
-        solutionToFile(solution, OUT_FOLDER + file)
+def submitAll(answers):
+    for libs, fileName in zip(answers, FILE_NAMES):
+        submitToFile(libs, OUT_FOLDER + fileName + '.txt')

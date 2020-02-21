@@ -1,34 +1,30 @@
-def calculateFinalScore(solution, file):
+def calculateFinalScore(inputObj, libs):
     currentDay = 0
     score = 0
-    booksScanned = []
-    librariesSignedUp = []
+    scanned = [False] * inputObj.nbOfBooks
 
-    # for each libraby
-    for x in range(solution.nbOfLibraries):
-        # get library
-        library = solution.libraries[x]
+    for lib in libs:
 
-        # skip scanned libraries
-        if library.id in librariesSignedUp:
-            continue
+        # skip if the sign up will take too long
+        if currentDay + lib.signUpTime > inputObj.nbOfDays:
+            break
 
-        # skip if too long sign up
-        if (currentDay + library.signUpTime) > file.nbOfDays:
-            continue
-
-        # else add libraryId and sign up time
-        librariesSignedUp.append(library.id)
-        currentDay += library.signUpTime
+        # else add sign up time
+        currentDay += lib.signUpTime
 
         # for each day left, for each book today, add books
-        for day in range(currentDay, file.nbOfDays):
-            for bookId in range(0, library.bookOutput):
-                # Skipped scanned books
-                if bookId in booksScanned:
-                    continue
-                # else add score
-                booksScanned.append(bookId)
-                score += file.bookScores[bookId]
+        bookPos = 0
+        virtualFuture = currentDay
+        while bookPos < len(lib.scannedBooks) and virtualFuture < inputObj.nbOfDays:
+            bookId = lib.scannedBooks[bookPos].id
+            bookScore = lib.scannedBooks[bookPos].score
+            if not scanned[bookId]:
+                scanned[bookId] = True
+                score += bookScore
+            bookPos += 1
+
+            # increase the day count if the we went through all the books for this day
+            if bookPos % lib.bookOutput == 0:
+                virtualFuture += 1
 
     return score
